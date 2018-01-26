@@ -13,23 +13,19 @@ module identify_promoter {
 */
 
 
-typedef structure {
+  typedef structure {
     string Genome;
     string featureSet;
     int promoter_length;
-} get_promoter_for_gene_input;
+  } get_promoter_for_gene_input;
 
-typedef structure {
- string report_name;
- string report_ref;
-} get_promoter_for_gene_output_params;
-
-
-funcdef get_promoter_for_gene(get_promoter_for_gene_input params)
-      returns (get_promoter_for_gene_output_params output)
-      authentication required;
+  typedef structure {
+    string report_name;
+    string report_ref;
+  } get_promoter_for_gene_output_params;
 
 
+  funcdef get_promoter_for_gene(get_promoter_for_gene_input params)
+    returns (get_promoter_for_gene_output_params output) authentication required;
 
 };
-

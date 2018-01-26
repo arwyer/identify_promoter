@@ -9,16 +9,40 @@
         "input": null,
         "output": null
     },
-    "parameters": [ 
+    "parameters": [
         {
-            "id": "parameter_1",
-            "optional": true,
+            "id": "genome_ref",
+            "optional": false,
             "advanced": false,
             "allow_multiple": false,
             "default_values": [ "" ],
             "field_type": "text",
             "text_options": {
-                "valid_ws_types": [ ]
+                "valid_ws_types": [ "KbaseGenomes.Genome"]
+            }
+        },
+        {
+
+            "id": "featureSet_ref",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text",
+            "text_options": {
+                "valid_ws_types": [ "KbaseCollections.FeatureSet" ]
+            }
+        },
+        {
+            "id": "promoter_length",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "100" ],
+            "field_type": "text",
+            "text_options": {
+                "validate_as": "int",
+                "min_integer" : 0
             }
         }
     ],
@@ -26,25 +50,36 @@
         "service-mapping": {
             "url": "",
             "name": "identify_promoter",
-            "method": "your_method",
+            "method": "get_promoter_for_gene",
             "input_mapping": [
                 {
                     "narrative_system_variable": "workspace",
-                    "target_argument_position": 0
+                    "target_property": "workspace_name",
                 },
                 {
-                    "input_parameter": "parameter_1",
-                    "target_argument_position": 1
+                    "input_parameter": "genome_ref",
+                    "target_property": "genome_ref",
+                    "target_type_transform": "resolved-ref"
+                },
+                {
+                    "input_parameter": "featureSet_ref",
+                    "target_property": "featureSet_ref",
+                    "target_type_transform": "resolved-ref"
+                },
+                {
+                    "input_parameter": "promoter_length",
+                    "target_property": "promoter_length"
+
                 }
             ],
             "output_mapping": [
                 {
-                    "service_method_output_path": [0],
-                    "target_property": "output"
+                    "service_method_output_path": [0,"report_name"],
+                    "target_property": "report_name"
                 },
                 {
-                    "input_parameter": "parameter_1",
-                    "target_property": "input"
+                    "service_method_output_path": [0,"report_ref"],
+                    "target_property": "report_ref"
                 },
                 {
                     "narrative_system_variable": "workspace",
