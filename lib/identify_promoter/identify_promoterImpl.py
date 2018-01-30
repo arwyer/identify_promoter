@@ -31,6 +31,7 @@ get_promoter_for_gene retrieves promoter sequence for a gene
     GIT_COMMIT_HASH = "421f8f35d1f7e225b22dded28f8005fbcb0afd8a"
 
     #BEGIN_CLASS_HEADER
+
     #END_CLASS_HEADER
 
     # config contains contents of config file in a hash or None if it couldn't
@@ -41,7 +42,6 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         self.shared_folder = config['scratch']
         #END_CONSTRUCTOR
         pass
-
 
     def get_promoter_for_gene(self, ctx, params):
         """
@@ -63,17 +63,60 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         objects = dfu.get_objects(objectRefs)
         genome = objects['data'][0]['data']
         featureSet = objects['data'][1]['data']
-        assembly_ref = {'object_refs':[genome['assembly_ref']]}
-        assembly = dfu.get_objects(assembly_ref)['data'][0]['data']
+        assembly_ref = {'ref': genome['assembly_ref']}
         with open('/kb/module/work/genome.json','w') as f:
             json.dump(genome,f)
         with open('/kb/module/work/featureSet.json','w') as f:
             json.dump(featureSet,f)
-        with open('/kb/module/work/asssembly.json','w') as f:
-            json.dump(assembly,f)
-        stfp = {'handle_id':assembly['fasta_handle_ref'],'file_path':'/kb/module/work/fasta_file'}
-        stfo = dfu.shock_to_file(stfp)
-        pprint(stfo)
+        #with open('/kb/module/work/asssembly.json','w') as f:
+        #    json.dump(assembly,f)
+        print('Downloading Assembly data as a Fasta file.')
+        assemblyUtil = AssemblyUtil(self.callback_url)
+        fasta_file = assemblyUtil.get_assembly_as_fasta(assembly_ref)
+        #pprint(fasta_file)
+        #loop over featureSet
+        #find matching feature in genome
+        #get record, start, orientation, length
+        #TODO: add some error checking logic to the bounds of the promoter
+        for feature in featureSet['elements']:
+            #print(feature)
+            #print(featureSet['elements'][feature])
+            for f in genome['features']:
+                if f['id'] == feature:
+                    attributes = f['location'][0]
+                    #print(f['location'])
+                    break
+            for record in SeqIO.parse(fasta_file['path'], 'fasta'):
+                #print(record.id)
+                #print(attributes[0])
+                if record.id == attributes[0]:
+                    #print(attributes[0])
+                    if attributes[2] == '+':
+                        #might need to offset by 1?
+                        end = attributes[1]
+                        start = end - params['promoter_length']
+                        if end < 0:
+                            end = 0
+                        promoter = record.seq[start:end].upper()
+                    elif attributes[2] == '-':
+                        start = attributes[1]
+                        end = start + params['promoter_length']
+                        if end > len(record.seq) - 1:
+                            end = len(record.seq) - 1
+                        promoter = record.seq[start:end].upper()
+                        complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'}
+                        promoter = ''.join([complement[base] for base in promoter[::-1]])
+                    else:
+                        print('Error on orientation')
+                    print('>'+feature)
+                    print(promoter)
+                    break
+
+
+
+        #iterate over records in fasta
+        #for record in SeqIO.parse(fasta_file['path'], 'fasta'):
+
 
         #objects list of Genome and featureSet
 
