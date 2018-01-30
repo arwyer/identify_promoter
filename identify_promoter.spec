@@ -14,8 +14,8 @@ module identify_promoter {
 
 
   typedef structure {
-    string Genome;
-    string featureSet;
+    string genome_ref;
+    string featureSet_ref;
     int promoter_length;
   } get_promoter_for_gene_input;
 
