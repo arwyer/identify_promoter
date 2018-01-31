@@ -66,7 +66,7 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         #BEGIN get_promoter_for_gene
         #code goes here
         dfu = DataFileUtil(self.callback_url)
-        objectRefs = {'object_refs':[params['Genome'],params['featureSet']]}
+        objectRefs = {'object_refs':[params['genome_ref'],params['featureSet_ref']]}
         objects = dfu.get_objects(objectRefs)
         genome = objects['data'][0]['data']
         featureSet = objects['data'][1]['data']
@@ -136,7 +136,7 @@ get_promoter_for_gene retrieves promoter sequence for a gene
 
 
         html_report_lines = "<html><body>"
-        html_report_lines += "<pre>" + prom + "</pre>" 
+        html_report_lines += "<pre>" + prom + "</pre>"
         html_report_lines += "</body></html>"
 
         with open (output_html_file_path, 'w', 0) as html_handle:
@@ -154,7 +154,7 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         reportName = 'identify_promoter_report_'+str(uuid.uuid4())
 
         reportObj = {'objects_created': [],
-                     'message': '',  
+                     'message': '',
                      'direct_html': None,
                      'direct_html_index': 0,
                      'file_links': [],
