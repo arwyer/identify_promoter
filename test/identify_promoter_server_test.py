@@ -87,7 +87,7 @@ class identify_promoterTest(unittest.TestCase):
         # Check returned data with
         # self.assertEqual(ret[...], ...) or other unittest methods
         params = {
-            'input_ws': 'arwyer:narrative_1516985493280',
+            'workspace_name': 'arwyer:narrative_1516985493280',
             'Genome': '27852/2/1',
             'featureSet': '27852/3/1',
             'promoter_length':100

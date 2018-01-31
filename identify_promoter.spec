@@ -14,6 +14,7 @@ module identify_promoter {
 
 
   typedef structure {
+    string workspace_name;
     string genome_ref;
     string featureSet_ref;
     int promoter_length;

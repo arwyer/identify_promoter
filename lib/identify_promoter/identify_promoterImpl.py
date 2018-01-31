@@ -7,6 +7,13 @@ from pprint import pprint, pformat
 from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
 from KBaseReport.KBaseReportClient import KBaseReport
 from DataFileUtil.DataFileUtilClient import DataFileUtil
+import subprocess
+import os
+import re
+from pprint import pprint, pformat
+from datetime import datetime
+import uuid
+
 #END_HEADER
 
 
@@ -73,11 +80,13 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         print('Downloading Assembly data as a Fasta file.')
         assemblyUtil = AssemblyUtil(self.callback_url)
         fasta_file = assemblyUtil.get_assembly_as_fasta(assembly_ref)
+
         #pprint(fasta_file)
         #loop over featureSet
         #find matching feature in genome
         #get record, start, orientation, length
         #TODO: add some error checking logic to the bounds of the promoter
+        prom= ""
         for feature in featureSet['elements']:
             #print(feature)
             #print(featureSet['elements'][feature])
@@ -98,6 +107,10 @@ get_promoter_for_gene retrieves promoter sequence for a gene
                         if end < 0:
                             end = 0
                         promoter = record.seq[start:end].upper()
+                        prom += ">" + feature + "\n"
+                        prom += promoter + "\n"
+
+
                     elif attributes[2] == '-':
                         start = attributes[1]
                         end = start + params['promoter_length']
@@ -106,11 +119,66 @@ get_promoter_for_gene retrieves promoter sequence for a gene
                         promoter = record.seq[start:end].upper()
                         complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'}
                         promoter = ''.join([complement[base] for base in promoter[::-1]])
+                        prom += ">" + feature + "\n"
+                        prom += promoter + "\n"
+
+
                     else:
                         print('Error on orientation')
-                    print('>'+feature)
-                    print(promoter)
-                    break
+
+
+        timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000)
+        html_output_dir = os.path.join(self.shared_folder,'output_html.'+str(timestamp))
+        if not os.path.exists(html_output_dir):
+            os.makedirs(html_output_dir)
+        html_file = 'promoter.html'
+        output_html_file_path = os.path.join(html_output_dir, html_file);
+
+
+        html_report_lines = "<html><body>"
+        html_report_lines += "<pre>" + prom + "</pre>" 
+        html_report_lines += "</body></html>"
+
+        with open (output_html_file_path, 'w', 0) as html_handle:
+            html_handle.write(html_report_lines)
+
+        try:
+            html_upload_ret = dfu.file_to_shock({'file_path': html_output_dir,
+            #html_upload_ret = dfu.file_to_shock({'file_path': output_html_file_path,
+                                                 #'make_handle': 0})
+                                                 'make_handle': 0,
+                                                 'pack': 'zip'})
+        except:
+            raise ValueError ('error uploading HTML file to shock')
+
+        reportName = 'identify_promoter_report_'+str(uuid.uuid4())
+
+        reportObj = {'objects_created': [],
+                     'message': '',  
+                     'direct_html': None,
+                     'direct_html_index': 0,
+                     'file_links': [],
+                     'html_links': [],
+                     'html_window_height': 220,
+                     'workspace_name': params['workspace_name'],
+                     'report_object_name': reportName
+                     }
+
+
+        # attach to report obj
+        #reportObj['direct_html'] = None
+        reportObj['direct_html'] = ''
+        reportObj['direct_html_link_index'] = 0
+        reportObj['html_links'] = [{'shock_id': html_upload_ret['shock_id'],
+                                    'name': html_file,
+                                    'label': 'View'
+                                    }
+                                   ]
+
+        report = KBaseReport(self.callback_url, token=ctx['token'])
+        #report_info = report.create({'report':reportObj, 'workspace_name':input_params['input_ws']})
+        report_info = report.create_extended_report(reportObj)
+        output = { 'report_name': report_info['name'], 'report_ref': report_info['ref'] }
 
 
 
