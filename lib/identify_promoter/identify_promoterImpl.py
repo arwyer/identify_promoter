@@ -140,7 +140,7 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         html_report_lines += '</body></html>'
 
         with open (output_html_file_path, 'w', 0) as html_handle:
-            html_handle.write(html_report_lines)
+            html_handle.write(str(html_report_lines))
 
         try:
             html_upload_ret = dfu.file_to_shock({'file_path': html_output_dir,
