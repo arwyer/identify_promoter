@@ -135,9 +135,9 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         output_html_file_path = os.path.join(html_output_dir, html_file);
 
 
-        html_report_lines = "<html><body>"
-        html_report_lines += "<pre>" + prom + "</pre>"
-        html_report_lines += "</body></html>"
+        html_report_lines = '<html><body>'
+        html_report_lines += '<pre>' + prom + '</pre>'
+        html_report_lines += '</body></html>'
 
         with open (output_html_file_path, 'w', 0) as html_handle:
             html_handle.write(html_report_lines)
