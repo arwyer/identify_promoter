@@ -69,7 +69,7 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         # return variables are: output
         #BEGIN find_motifs
 
-        promoterFastaFilePath = get_promoter_for_gene(ctx,params)
+        promoterFastaFilePath = self.get_promoter_for_gene(ctx,params)[0]
         gibbsCommand = GU.build_gibbs_command(promoterFastaFilePath)
         GU.run_gibbs_command(gibbsCommand)
         homerMotifCommand = HU.build_homer_motif_command(promoterFastaFilePath)
