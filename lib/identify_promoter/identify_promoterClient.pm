@@ -109,9 +109,9 @@ sub new
 
 
 
-=head2 get_promoter_for_gene
+=head2 find_motifs
 
-  $output = $obj->get_promoter_for_gene($params)
+  $output = $obj->find_motifs($params)
 
 =over 4
 
@@ -123,6 +123,7 @@ sub new
 $params is an identify_promoter.get_promoter_for_gene_input
 $output is an identify_promoter.get_promoter_for_gene_output_params
 get_promoter_for_gene_input is a reference to a hash where the following keys are defined:
+	workspace_name has a value which is a string
 	genome_ref has a value which is a string
 	featureSet_ref has a value which is a string
 	promoter_length has a value which is an int
@@ -139,12 +140,105 @@ get_promoter_for_gene_output_params is a reference to a hash where the following
 $params is an identify_promoter.get_promoter_for_gene_input
 $output is an identify_promoter.get_promoter_for_gene_output_params
 get_promoter_for_gene_input is a reference to a hash where the following keys are defined:
+	workspace_name has a value which is a string
 	genome_ref has a value which is a string
 	featureSet_ref has a value which is a string
 	promoter_length has a value which is an int
 get_promoter_for_gene_output_params is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub find_motifs
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function find_motifs (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to find_motifs:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'find_motifs');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "identify_promoter.find_motifs",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'find_motifs',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method find_motifs",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'find_motifs',
+				       );
+    }
+}
+ 
+
+
+=head2 get_promoter_for_gene
+
+  $output = $obj->get_promoter_for_gene($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is an identify_promoter.get_promoter_for_gene_input
+$output is a string
+get_promoter_for_gene_input is a reference to a hash where the following keys are defined:
+	workspace_name has a value which is a string
+	genome_ref has a value which is a string
+	featureSet_ref has a value which is a string
+	promoter_length has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is an identify_promoter.get_promoter_for_gene_input
+$output is a string
+get_promoter_for_gene_input is a reference to a hash where the following keys are defined:
+	workspace_name has a value which is a string
+	genome_ref has a value which is a string
+	featureSet_ref has a value which is a string
+	promoter_length has a value which is an int
 
 
 =end text
@@ -311,6 +405,7 @@ Promoter_length is the length of promoter requested for all genes
 
 <pre>
 a reference to a hash where the following keys are defined:
+workspace_name has a value which is a string
 genome_ref has a value which is a string
 featureSet_ref has a value which is a string
 promoter_length has a value which is an int
@@ -322,6 +417,7 @@ promoter_length has a value which is an int
 =begin text
 
 a reference to a hash where the following keys are defined:
+workspace_name has a value which is a string
 genome_ref has a value which is a string
 featureSet_ref has a value which is a string
 promoter_length has a value which is an int

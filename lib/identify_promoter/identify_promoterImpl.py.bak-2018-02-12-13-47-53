@@ -13,8 +13,8 @@ import re
 from pprint import pprint, pformat
 from datetime import datetime
 import uuid
-import identify_promoter.Utils.GibbsUtil as GU
-import identify_promoter.Utils.HomerUtil as HU
+import identify_promoter.Utils.GibbsUtil
+import identify_promoter.Utils.HomerUtil
 
 #END_HEADER
 
@@ -37,7 +37,7 @@ get_promoter_for_gene retrieves promoter sequence for a gene
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/arwyer/identify_promoter.git"
-    GIT_COMMIT_HASH = "1f94c5754e7279926790c8c95efcb9c1cc3a8c47"
+    GIT_COMMIT_HASH = "421f8f35d1f7e225b22dded28f8005fbcb0afd8a"
 
     #BEGIN_CLASS_HEADER
 
@@ -52,48 +52,16 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         #END_CONSTRUCTOR
         pass
 
-
-    def find_motifs(self, ctx, params):
-        """
-        :param params: instance of type "get_promoter_for_gene_input" (Genome
-           is a KBase genome Featureset is a KBase featureset Promoter_length
-           is the length of promoter requested for all genes) -> structure:
-           parameter "workspace_name" of String, parameter "genome_ref" of
-           String, parameter "featureSet_ref" of String, parameter
-           "promoter_length" of Long
-        :returns: instance of type "get_promoter_for_gene_output_params" ->
-           structure: parameter "report_name" of String, parameter
-           "report_ref" of String
-        """
-        # ctx is the context object
-        # return variables are: output
-        #BEGIN find_motifs
-
-        promoterFastaFilePath = get_promoter_for_gene(ctx,params)
-        gibbsCommand = GU.build_gibbs_command(promoterFastaFilePath)
-        GU.run_gibbs_command(gibbsCommand)
-        homerMotifCommand = HU.build_homer_motif_command(promoterFastaFilePath)
-        homerLocationCommand = HU.build_homer_location_command(promoterFastaFilePath)
-        HU.run_homer_command(homerMotifCommand)
-        HU.run_homer_command(homerLocationCommand)
-        #END find_motifs
-
-        # At some point might do deeper type checking...
-        if not isinstance(output, dict):
-            raise ValueError('Method find_motifs return value ' +
-                             'output is not type dict as required.')
-        # return the results
-        return [output]
-
     def get_promoter_for_gene(self, ctx, params):
         """
         :param params: instance of type "get_promoter_for_gene_input" (Genome
            is a KBase genome Featureset is a KBase featureset Promoter_length
            is the length of promoter requested for all genes) -> structure:
-           parameter "workspace_name" of String, parameter "genome_ref" of
-           String, parameter "featureSet_ref" of String, parameter
-           "promoter_length" of Long
-        :returns: instance of String
+           parameter "genome_ref" of String, parameter "featureSet_ref" of
+           String, parameter "promoter_length" of Long
+        :returns: instance of type "get_promoter_for_gene_output_params" ->
+           structure: parameter "report_name" of String, parameter
+           "report_ref" of String
         """
         # ctx is the context object
         # return variables are: output
@@ -159,9 +127,6 @@ get_promoter_for_gene retrieves promoter sequence for a gene
 
                     else:
                         print('Error on orientation')
-        promOutputPath = '/kb/module/work/tmp/promFile.fa'
-        with open(promOutputPath,'w') as promFile:
-            promFile.write(prom)
 
 
         timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000)
@@ -216,9 +181,8 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         #report_info = report.create({'report':reportObj, 'workspace_name':input_params['input_ws']})
         report_info = report.create_extended_report(reportObj)
         output = { 'report_name': report_info['name'], 'report_ref': report_info['ref'] }
-        #changing output to be path string
-        #TODO: get rid of this html maybe and move into find_motifs
-        output = promOutputPath
+
+
 
         #iterate over records in fasta
         #for record in SeqIO.parse(fasta_file['path'], 'fasta'):
@@ -230,9 +194,9 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         #END get_promoter_for_gene
 
         # At some point might do deeper type checking...
-        if not isinstance(output, basestring):
+        if not isinstance(output, dict):
             raise ValueError('Method get_promoter_for_gene return value ' +
-                             'output is not type basestring as required.')
+                             'output is not type dict as required.')
         # return the results
         return [output]
     def status(self, ctx):

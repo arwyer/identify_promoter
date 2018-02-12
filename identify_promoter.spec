@@ -26,7 +26,10 @@ module identify_promoter {
   } get_promoter_for_gene_output_params;
 
 
-  funcdef get_promoter_for_gene(get_promoter_for_gene_input params)
+  funcdef find_motifs(get_promoter_for_gene_input params)
     returns (get_promoter_for_gene_output_params output) authentication required;
+
+  funcdef get_promoter_for_gene(get_promoter_for_gene_input params)
+    returns (string output) authentication required;
 
 };

@@ -33,16 +33,31 @@ class identify_promoter(object):
             trust_all_ssl_certificates=trust_all_ssl_certificates,
             auth_svc=auth_svc)
 
+    def find_motifs(self, params, context=None):
+        """
+        :param params: instance of type "get_promoter_for_gene_input" (Genome
+           is a KBase genome Featureset is a KBase featureset Promoter_length
+           is the length of promoter requested for all genes) -> structure:
+           parameter "workspace_name" of String, parameter "genome_ref" of
+           String, parameter "featureSet_ref" of String, parameter
+           "promoter_length" of Long
+        :returns: instance of type "get_promoter_for_gene_output_params" ->
+           structure: parameter "report_name" of String, parameter
+           "report_ref" of String
+        """
+        return self._client.call_method(
+            'identify_promoter.find_motifs',
+            [params], self._service_ver, context)
+
     def get_promoter_for_gene(self, params, context=None):
         """
         :param params: instance of type "get_promoter_for_gene_input" (Genome
            is a KBase genome Featureset is a KBase featureset Promoter_length
            is the length of promoter requested for all genes) -> structure:
-           parameter "genome_ref" of String, parameter "featureSet_ref" of
-           String, parameter "promoter_length" of Long
-        :returns: instance of type "get_promoter_for_gene_output_params" ->
-           structure: parameter "report_name" of String, parameter
-           "report_ref" of String
+           parameter "workspace_name" of String, parameter "genome_ref" of
+           String, parameter "featureSet_ref" of String, parameter
+           "promoter_length" of Long
+        :returns: instance of String
         """
         return self._client.call_method(
             'identify_promoter.get_promoter_for_gene',

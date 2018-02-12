@@ -93,6 +93,6 @@ class identify_promoterTest(unittest.TestCase):
             'promoter_length':100
         }
 
-        result = self.getImpl().get_promoter_for_gene(self.getContext(),params)
+        result = self.getImpl().find_motifs(self.getContext(),params)
         print('RESULT:')
         pprint(result)

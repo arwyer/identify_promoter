@@ -333,6 +333,10 @@ class Application(object):
         self.serverlog.set_log_level(6)
         self.rpc_service = JSONRPCServiceCustom()
         self.method_authentication = dict()
+        self.rpc_service.add(impl_identify_promoter.find_motifs,
+                             name='identify_promoter.find_motifs',
+                             types=[dict])
+        self.method_authentication['identify_promoter.find_motifs'] = 'required'  # noqa
         self.rpc_service.add(impl_identify_promoter.get_promoter_for_gene,
                              name='identify_promoter.get_promoter_for_gene',
                              types=[dict])

@@ -28,6 +28,10 @@ RUN mkdir -p /kb/module/work
 RUN chmod -R a+rw /kb/module
 
 WORKDIR /kb/module
+COPY ./deps /kb/deps
+RUN \
+  sh /kb/deps/kb_homer/install-homer.sh && \
+  sh /kb/deps/kb_gibbs/install-gibbs.sh 
 
 RUN make all
 

@@ -50,7 +50,7 @@
         "service-mapping": {
             "url": "",
             "name": "identify_promoter",
-            "method": "get_promoter_for_gene",
+            "method": "find_motifs",
             "input_mapping": [
                 {
                     "narrative_system_variable": "workspace",

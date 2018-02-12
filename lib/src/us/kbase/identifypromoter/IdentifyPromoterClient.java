@@ -164,7 +164,7 @@ public class IdentifyPromoterClient {
     }
 
     /**
-     * <p>Original spec-file function name: get_promoter_for_gene</p>
+     * <p>Original spec-file function name: find_motifs</p>
      * <pre>
      * </pre>
      * @param   params   instance of type {@link us.kbase.identifypromoter.GetPromoterForGeneInput GetPromoterForGeneInput} (original type "get_promoter_for_gene_input")
@@ -172,11 +172,28 @@ public class IdentifyPromoterClient {
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public GetPromoterForGeneOutputParams getPromoterForGene(GetPromoterForGeneInput params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public GetPromoterForGeneOutputParams findMotifs(GetPromoterForGeneInput params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         args.add(params);
         TypeReference<List<GetPromoterForGeneOutputParams>> retType = new TypeReference<List<GetPromoterForGeneOutputParams>>() {};
-        List<GetPromoterForGeneOutputParams> res = caller.jsonrpcCall("identify_promoter.get_promoter_for_gene", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        List<GetPromoterForGeneOutputParams> res = caller.jsonrpcCall("identify_promoter.find_motifs", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: get_promoter_for_gene</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link us.kbase.identifypromoter.GetPromoterForGeneInput GetPromoterForGeneInput} (original type "get_promoter_for_gene_input")
+     * @return   parameter "output" of String
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public String getPromoterForGene(GetPromoterForGeneInput params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
+        List<String> res = caller.jsonrpcCall("identify_promoter.get_promoter_for_gene", args, retType, true, true, jsonRpcContext, this.serviceVersion);
         return res.get(0);
     }
 

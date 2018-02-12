@@ -23,12 +23,15 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
+    "workspace_name",
     "genome_ref",
     "featureSet_ref",
     "promoter_length"
 })
 public class GetPromoterForGeneInput {
 
+    @JsonProperty("workspace_name")
+    private String workspaceName;
     @JsonProperty("genome_ref")
     private String genomeRef;
     @JsonProperty("featureSet_ref")
@@ -36,6 +39,21 @@ public class GetPromoterForGeneInput {
     @JsonProperty("promoter_length")
     private Long promoterLength;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+    @JsonProperty("workspace_name")
+    public String getWorkspaceName() {
+        return workspaceName;
+    }
+
+    @JsonProperty("workspace_name")
+    public void setWorkspaceName(String workspaceName) {
+        this.workspaceName = workspaceName;
+    }
+
+    public GetPromoterForGeneInput withWorkspaceName(String workspaceName) {
+        this.workspaceName = workspaceName;
+        return this;
+    }
 
     @JsonProperty("genome_ref")
     public String getGenomeRef() {
@@ -94,7 +112,7 @@ public class GetPromoterForGeneInput {
 
     @Override
     public String toString() {
-        return ((((((((("GetPromoterForGeneInput"+" [genomeRef=")+ genomeRef)+", featureSetRef=")+ featureSetRef)+", promoterLength=")+ promoterLength)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((("GetPromoterForGeneInput"+" [workspaceName=")+ workspaceName)+", genomeRef=")+ genomeRef)+", featureSetRef=")+ featureSetRef)+", promoterLength=")+ promoterLength)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }
