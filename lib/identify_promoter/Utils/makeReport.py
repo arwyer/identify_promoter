@@ -7,9 +7,9 @@ from pyseqlogo.pyseqlogo import draw_logo, setup_axis
 #Args - 1 - input file_path
 #       2 - output file_name(path is hardcoded for now...)
 #maybe need to import matplotlib and pyplot?
-htmlDir = '/kb/module/work/tmp/html'
+#htmlDir = '/kb/module/work/tmp/html'
 htmlReport = '<html><body>'
-htmlReport += '<table style="width:100%">\n' + '<tr>\n'
+htmlReport += '<table style="width:100%" border=1>\n' + '<tr>\n'
 htmlReport += '<th> Sequence </th>\n' + '<th> Logo </th>\n' + '<th> Ratio </th>\n + </tr>\n'
 with open(sys.argv[1],'r') as jsonFile:
     jsonData = json.load(jsonFile)
@@ -18,9 +18,10 @@ with open(sys.argv[1],'r') as jsonFile:
         #plt.rcParams['figure.dpi'] = 300
         fig, axarr = draw_logo(motif['pwm'])
         fig.tight_layout()
-        imgName = motif['Iupac_signature'] + '_gibbs.png'
-        saveTo = htmlDir + '/' + imgName
-        htmlReport += '<td> <img src="' + imgName + '"> </td>\n'
+        imgName = motif['Iupac_signature'] + sys.argv[2].split('/')[len(sys.argv[2].split('/'))-1].replace('.html','') + '.png'
+        #saveTo = htmlDir + '/' + imgName
+        saveTo = '/' + '/'.join(sys.argv[2].split('/')[:-1]) + '/'  + imgName
+        htmlReport += '<td> <img src="' + imgName + '" height=25%> </td>\n'
         htmlReport += '<td> 1 </td>\n'
         htmlReport += '</tr>\n'
         plt.savefig(saveTo)

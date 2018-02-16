@@ -80,13 +80,17 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         GU.run_gibbs_command(gibbsCommand)
         homerMotifCommand = HU.build_homer_motif_command(promoterFastaFilePath)
         homerLocationCommand = HU.build_homer_location_command(promoterFastaFilePath)
+        os.mkdir(self.shared_folder+'/homer_out')
         HU.run_homer_command(homerMotifCommand)
         HU.run_homer_command(homerLocationCommand)
         GU.parse_gibbs_output()
         HU.parse_homer_output()
-        os.mkdir('/kb/module/work/tmp/html')
-        subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py','/kb/module/work/tmp/gibbs.json','/kb/module/work/tmp/html/gibbs.html'])
-        subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py','/kb/module/work/tmp/homer_out/homer.json','/kb/module/work/tmp/html/homer.html'])
+        timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000)
+        timestamp = str(timestamp)
+        htmlDir = self.shared_folder + '/html' +  timestamp
+        os.mkdir(htmlDir)
+        subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py',self.shared_folder + '/gibbs.json',htmlDir + '/gibbs.html'])
+        subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py',self.shared_folder + '/homer_out/homer.json',htmlDir + '/homer.html'])
 
 
         #What needs to happen here:
@@ -97,20 +101,19 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         for p in parsed:
             indexHtmlStr += '<a href="' + p + '">' + p.replace('.html','') +' Output</a>\n'
         indexHtmlStr += '</body></html>'
-        with open('/kb/module/work/tmp/html/index.html','w') as html_handle:
+        with open(htmlDir+  '/index.html','w') as html_handle:
             html_handle.write(str(indexHtmlStr))
 
         #plt.rcParams['figure.dpi'] = 300
 
 
-        htmlDir = '/kb/module/work/tmp/html/'
-        htmlFiles = ['index.html','gibbs.html','homer.html']
-        shockParamsList = []
-        for f in htmlFiles:
-            shockParamsList.append({'file_path': htmlDir + f ,'make_handle': 0, 'pack': 'zip'})
+        #htmlFiles = ['index.html','gibbs.html','homer.html']
+        #shockParamsList = []
+        #for f in htmlFiles:
+        #    shockParamsList.append({'file_path': htmlDir + f ,'make_handle': 0, 'pack': 'zip'})
 
         try:
-            html_upload_ret = dfu.file_to_shock_mass(shockParamsList)
+            html_upload_ret = dfu.file_to_shock({'file_path': htmlDir ,'make_handle': 0, 'pack': 'zip'})
         except:
             raise ValueError ('error uploading HTML file to shock')
 
@@ -132,11 +135,12 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         #reportObj['direct_html'] = None
         reportObj['direct_html'] = ''
         reportObj['direct_html_link_index'] = 0
-        reportObj['html_links'] = [{'shock_id': html_upload_ret[0]['shock_id'],
-                                    'name': 'index.html',
-                                    'label': 'View'
+        reportObj['html_links'] = [{'shock_id': html_upload_ret['shock_id'],
+                                    'name': 'promoter_download.zip',
+                                    'label': 'Save promoter_download.zip'
                                     }
                                    ]
+
 
         report = KBaseReport(self.callback_url, token=ctx['token'])
         #report_info = report.create({'report':reportObj, 'workspace_name':input_params['input_ws']})
