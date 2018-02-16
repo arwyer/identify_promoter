@@ -95,7 +95,7 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         parsed = ['gibbs.html','homer.html']
         indexHtmlStr = '<html><body>'
         for p in parsed:
-            indexHtmlStr += '<a href="' + p + '">' + p.replace('.html','') +' Output</a>'
+            indexHtmlStr += '<a href="' + p + '">' + p.replace('.html','') +' Output</a>\n'
         indexHtmlStr += '</body></html>'
         with open('/kb/module/work/tmp/html/index.html','w') as html_handle:
             html_handle.write(str(indexHtmlStr))
@@ -133,7 +133,7 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         reportObj['direct_html'] = ''
         reportObj['direct_html_link_index'] = 0
         reportObj['html_links'] = [{'shock_id': html_upload_ret[0]['shock_id'],
-                                    'name': html_file,
+                                    'name': 'index.html',
                                     'label': 'View'
                                     }
                                    ]
