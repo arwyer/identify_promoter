@@ -15,6 +15,11 @@ from datetime import datetime
 import uuid
 import identify_promoter.Utils.GibbsUtil as GU
 import identify_promoter.Utils.HomerUtil as HU
+import subprocess
+#import matplotlib
+#matplotlib.use('Agg')
+#import matplotlib.pyplot as plt
+#from pyseqlogo.pyseqlogo import draw_logo, setup_axis
 
 #END_HEADER
 
@@ -69,6 +74,7 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         # return variables are: output
         #BEGIN find_motifs
 
+        #TODO: have these guys return output paths
         promoterFastaFilePath = self.get_promoter_for_gene(ctx,params)[0]
         gibbsCommand = GU.build_gibbs_command(promoterFastaFilePath)
         GU.run_gibbs_command(gibbsCommand)
@@ -76,6 +82,68 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         homerLocationCommand = HU.build_homer_location_command(promoterFastaFilePath)
         HU.run_homer_command(homerMotifCommand)
         HU.run_homer_command(homerLocationCommand)
+        GU.parse_gibbs_output()
+        HU.parse_homer_output()
+        os.mkdir('/kb/module/work/tmp/html')
+        subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py','/kb/module/work/tmp/gibbs.json','/kb/module/work/tmp/html/gibbs.html'])
+        subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py','/kb/module/work/tmp/homer_out/homer.json','/kb/module/work/tmp/html/homer.html'])
+
+
+        #What needs to happen here:
+        #call makeLogo for each of the json outputs(capture these from somewhere)
+        dfu = DataFileUtil(self.callback_url)
+        parsed = ['gibbs.html','homer.html']
+        indexHtmlStr = '<html><body>'
+        for p in parsed:
+            indexHtmlStr += '<a href="' + p + '">' + p.replace('.html','') +' Output</a>'
+        indexHtmlStr += '</body></html>'
+        with open('/kb/module/work/tmp/html/index.html','w') as html_handle:
+            html_handle.write(str(indexHtmlStr))
+
+        #plt.rcParams['figure.dpi'] = 300
+
+
+        htmlDir = '/kb/module/work/tmp/html/'
+        htmlFiles = ['index.html','gibbs.html','homer.html']
+        shockParamsList = []
+        for f in htmlFiles:
+            shockParamsList.append({'file_path': htmlDir + f ,'make_handle': 0, 'pack': 'zip'})
+
+        try:
+            html_upload_ret = dfu.file_to_shock_mass(shockParamsList)
+        except:
+            raise ValueError ('error uploading HTML file to shock')
+
+        reportName = 'identify_promoter_report_'+str(uuid.uuid4())
+
+        reportObj = {'objects_created': [],
+                     'message': '',
+                     'direct_html': None,
+                     'direct_html_index': 0,
+                     'file_links': [],
+                     'html_links': [],
+                     'html_window_height': 220,
+                     'workspace_name': params['workspace_name'],
+                     'report_object_name': reportName
+                     }
+
+
+        # attach to report obj
+        #reportObj['direct_html'] = None
+        reportObj['direct_html'] = ''
+        reportObj['direct_html_link_index'] = 0
+        reportObj['html_links'] = [{'shock_id': html_upload_ret[0]['shock_id'],
+                                    'name': html_file,
+                                    'label': 'View'
+                                    }
+                                   ]
+
+        report = KBaseReport(self.callback_url, token=ctx['token'])
+        #report_info = report.create({'report':reportObj, 'workspace_name':input_params['input_ws']})
+        report_info = report.create_extended_report(reportObj)
+        output = { 'report_name': report_info['name'], 'report_ref': report_info['ref'] }
+
+
         #END find_motifs
 
         # At some point might do deeper type checking...

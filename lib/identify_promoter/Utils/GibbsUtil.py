@@ -6,7 +6,7 @@ def build_gibbs_command(inputFilePath):
     outputFilePath = '/kb/module/work/tmp/gibbs_output.txt'
     #outputFilePath = './temp/gibbs_output.txt'
     length = '8'
-    command = 'Gibbs ' + inputFilePath + ' ' + length + ' -n > ' + outputFilePath
+    command = 'Gibbs ' + inputFilePath + ' ' + length + ' -n -basic > ' + outputFilePath
     return command
 
 def run_gibbs_command(command):

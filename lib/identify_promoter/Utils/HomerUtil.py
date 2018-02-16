@@ -9,8 +9,8 @@ def build_homer_motif_command(inputFilePath):
     return command
 
 def build_homer_location_command(inputFilePath):
-    #outputDirPath = '/kb/module/work/tmp/homer_out'
-    outputDirPath = './temp/homer_out'
+    outputDirPath = '/kb/module/work/tmp/homer_out'
+    #outputDirPath = './temp/homer_out'
     outputFilePath = outputDirPath + '/homerMotifs.all.motifs'
     outputTo = outputDirPath + '/homer_locations.txt'
     command = 'scanMotifGenomeWide.pl ' + outputFilePath + ' ' + inputFilePath + ' > ' + outputTo
