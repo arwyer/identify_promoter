@@ -177,9 +177,9 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         genome = objects['data'][0]['data']
         featureSet = objects['data'][1]['data']
         assembly_ref = {'ref': genome['assembly_ref']}
-        with open('/kb/module/work/genome.json','w') as f:
+        with open(self.shared_folder + '/genome.json','w') as f:
             json.dump(genome,f)
-        with open('/kb/module/work/featureSet.json','w') as f:
+        with open(self.shared_folder + '/featureSet.json','w') as f:
             json.dump(featureSet,f)
         #with open('/kb/module/work/asssembly.json','w') as f:
         #    json.dump(assembly,f)

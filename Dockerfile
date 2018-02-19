@@ -22,20 +22,22 @@ RUN pip install coverage
 #    && pip install 'requests[security]' --upgrade
 
 # -----------------------------------------
-
-COPY ./ /kb/module
-RUN mkdir -p /kb/module/work
-RUN chmod -R a+rw /kb/module
-
-WORKDIR /kb/module
+RUN mkdir -p /kb/deps
 COPY ./deps /kb/deps
 RUN \
   #sh /kb/deps/kb_psl/install-pyseqlogo.sh && \
   sh /kb/deps/kb_gibbs/install-gibbs.sh && \
   sh /kb/deps/kb_homer/install-homer.sh
 
-RUN apt-get update && apt-get -y install python3-pip &&  pip3 install matplotlib && pip3 install pandas && pip3 install pyBigWig
+RUN apt-get update && apt-get -y install python3-pip && pip3 install numpy && pip3 install scipy && pip3 install matplotlib && pip3 install pandas && pip3 install pyBigWig
 RUN git clone https://github.com/saketkc/pyseqlogo && cd pyseqlogo && python3 setup.py install && cd ..
+
+
+COPY ./ /kb/module
+RUN mkdir -p /kb/module/work
+RUN chmod -R a+rw /kb/module
+
+WORKDIR /kb/module
 
 
 
