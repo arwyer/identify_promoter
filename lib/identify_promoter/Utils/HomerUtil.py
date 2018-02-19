@@ -6,7 +6,7 @@ def build_homer_motif_command(inputFilePath):
     outputDirPath = '/kb/module/work/tmp/homer_out'
     #outputDirPath = './temp/homer_out'
     #command = 'findMotifs.pl ' + inputFilePath + ' fasta ' + outputDirPath
-    command = '/kb/module/work/homer/bin/findMotifs.pl ' + inputFilePath + ' fasta ' + outputDirPath
+    command = '/kb/module/work/homer/bin/findMotifs.pl ' + inputFilePath + ' fasta ' + outputDirPath +' -basic'
     return command
 
 def build_homer_location_command(inputFilePath):

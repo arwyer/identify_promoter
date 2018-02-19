@@ -6,7 +6,7 @@ def build_gibbs_command(inputFilePath):
     outputFilePath = '/kb/module/work/tmp/gibbs_output.txt'
     #outputFilePath = './temp/gibbs_output.txt'
     length = '8'
-    command = 'Gibbs ' + inputFilePath + ' ' + length + ' -n -basic > ' + outputFilePath
+    command = 'Gibbs ' + inputFilePath + ' ' + length + ' -n > ' + outputFilePath
     return command
 
 def run_gibbs_command(command):
@@ -59,13 +59,16 @@ def parse_gibbs_output():
         if processPWM is True:
             if len(line.split()) == 0:
                 processPWM = False
+                motifDict['pwm'] = pwmList
             elif '|' in line:
                 elems = line.split()
-                pwmList.append(('A',elems[2]))
-                pwmList.append(('C',elems[4]))
-                pwmList.append(('G',elems[5]))
-                pwmList.append(('T',elems[3]))
-            motifDict['pwm'] = pwmList
+                rowList = []
+                rowList.append(('A',float(elems[2])))
+                rowList.append(('C',float(elems[4])))
+                rowList.append(('G',float(elems[5])))
+                rowList.append(('T',float(elems[3])))
+                pwmList.append(rowList)
+
 
         if 'columns' in line:
             motifLength = int(line.split()[0])
