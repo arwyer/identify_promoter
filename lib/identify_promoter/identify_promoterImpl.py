@@ -211,12 +211,12 @@ function openReport(evt, reportName) {
                                     {'shock_id': html_upload_ret['shock_id'],
                                     #'name': 'promoter_download.zip',
                                     'name': 'homer.html',
-                                    'label': 'Save promoter_download.zip'
+                                    'label': 'gibbs'
                                     },
                                     {'shock_id': html_upload_ret['shock_id'],
                                     #'name': 'promoter_download.zip',
                                     'name': 'gibbs.html',
-                                    'label': 'Save promoter_download.zip'
+                                    'label': 'homer'
                                     }
 
                                    ]
