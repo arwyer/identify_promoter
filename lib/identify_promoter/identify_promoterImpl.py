@@ -101,7 +101,7 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         indexHtmlStr = '<html>'
         #use js to load the page content
         for p in parsed:
-            indexHtmlStr += '<head><script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script> <script> $(function(){$("#' + p.replace('.html','_content')  + '").load("' + p + '"); });</script> '
+            indexHtmlStr += '<head><script src="jquery.js"></script> <script> $(function(){$("#' + p.replace('.html','_content')  + '").load("' + p + '"); });</script> '
         indexHtmlStr += """<style>
             body {font-family: Arial;}
 
