@@ -205,7 +205,7 @@ function openReport(evt, reportName) {
         reportObj['direct_html_link_index'] = 0
         reportObj['html_links'] = [{'shock_id': html_upload_ret['shock_id'],
                                     #'name': 'promoter_download.zip',
-                                    'name': htmlDir,
+                                    'name': 'index.html',
                                     'label': 'Save promoter_download.zip'
                                     }
                                    ]
