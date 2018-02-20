@@ -16,6 +16,7 @@ import uuid
 import identify_promoter.Utils.GibbsUtil as GU
 import identify_promoter.Utils.HomerUtil as HU
 import subprocess
+from biokbase.workspace.client import Workspace
 #import matplotlib
 #matplotlib.use('Agg')
 #import matplotlib.pyplot as plt
@@ -239,15 +240,25 @@ function openReport(evt, reportName) {
         #BEGIN get_promoter_for_gene
         #code goes here
         dfu = DataFileUtil(self.callback_url)
-        objectRefs = {'object_refs':[params['genome_ref'],params['featureSet_ref']]}
+        #objectRefs = {'object_refs':[params['genome_ref'],params['featureSet_ref']]}
+        objectRefs = {'object_refs':[params['featureSet_ref']]}
+        ws = Workspace('https://appdev.kbase.us/services/ws')
+        ws_name = params['workspace_name']
+        subset = ws.get_object_subset([{
+                                     'included':['/features/[*]/location', '/features/[*]/id','/assembly_ref'],
+'ref':params['genome_ref']}])
+        features = subset[0]['data']['features']
+        aref = subset[0]['data']['assembly_ref']
         objects = dfu.get_objects(objectRefs)
-        genome = objects['data'][0]['data']
-        featureSet = objects['data'][1]['data']
-        assembly_ref = {'ref': genome['assembly_ref']}
-        with open(self.shared_folder + '/genome.json','w') as f:
-            json.dump(genome,f)
-        with open(self.shared_folder + '/featureSet.json','w') as f:
-            json.dump(featureSet,f)
+        #genome = objects['data'][0]['data']
+        #featureSet = objects['data'][1]['data']
+        featureSet = objects['data'][0]['data']
+        assembly_ref = {'ref': aref}
+        #print assembly_ref
+        #with open(self.shared_folder + '/genome.json','w') as f:
+        #    json.dump(genome,f)
+        #with open(self.shared_folder + '/featureSet.json','w') as f:
+        #    json.dump(featureSet,f)
         #with open('/kb/module/work/asssembly.json','w') as f:
         #    json.dump(assembly,f)
         print('Downloading Assembly data as a Fasta file.')
@@ -260,47 +271,61 @@ function openReport(evt, reportName) {
         #get record, start, orientation, length
         #TODO: add some error checking logic to the bounds of the promoter
         prom= ""
+        featureFound = False
         for feature in featureSet['elements']:
             #print(feature)
             #print(featureSet['elements'][feature])
-            for f in genome['features']:
+            featureFound = False
+            for f in features:
+                #print f['id']
+                #print feature
                 if f['id'] == feature:
                     attributes = f['location'][0]
+                    featureFound = True
+                    #print('found match ' + feature)
                     #print(f['location'])
                     break
-            for record in SeqIO.parse(fasta_file['path'], 'fasta'):
+            if featureFound:
+                for record in SeqIO.parse(fasta_file['path'], 'fasta'):
+                #for record in SeqIO.parse('/kb/module/work/Gmax_189_genome_assembly.fa', 'fasta'):
                 #print(record.id)
                 #print(attributes[0])
-                if record.id == attributes[0]:
+                    if record.id == attributes[0]:
+                        #print('adding to prom string')
                     #print(attributes[0])
-                    if attributes[2] == '+':
+                        if attributes[2] == '+':
+                            #print('1')
                         #might need to offset by 1?
-                        end = attributes[1]
-                        start = end - params['promoter_length']
-                        if end < 0:
-                            end = 0
-                        promoter = record.seq[start:end].upper()
-                        prom += ">" + feature + "\n"
-                        prom += promoter + "\n"
+                            end = attributes[1]
+                            start = end - params['promoter_length']
+                            if end < 0:
+                                end = 0
+                            promoter = record.seq[start:end].upper()
+                            prom += ">" + feature + "\n"
+                            prom += promoter + "\n"
 
 
-                    elif attributes[2] == '-':
-                        start = attributes[1]
-                        end = start + params['promoter_length']
-                        if end > len(record.seq) - 1:
-                            end = len(record.seq) - 1
-                        promoter = record.seq[start:end].upper()
-                        complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'}
-                        promoter = ''.join([complement[base] for base in promoter[::-1]])
-                        prom += ">" + feature + "\n"
-                        prom += promoter + "\n"
+                        elif attributes[2] == '-':
+                            #print('2')
+                            start = attributes[1]
+                            end = start + params['promoter_length']
+                            if end > len(record.seq) - 1:
+                                end = len(record.seq) - 1
+                            promoter = record.seq[start:end].upper()
+                            complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'}
+                            promoter = ''.join([complement[base] for base in promoter[::-1]])
+                            prom += ">" + feature + "\n"
+                            prom += promoter + "\n"
 
 
-                    else:
-                        print('Error on orientation')
+                        else:
+                            print('Error on orientation')
+            else:
+                print('Could not find feature ' + feature + 'in genome')
         promOutputPath = '/kb/module/work/tmp/promFile.fa'
+        #print('prom string\n' + str(prom))
         with open(promOutputPath,'w') as promFile:
-            promFile.write(prom)
+            promFile.write(str(prom))
 
 
         timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000)

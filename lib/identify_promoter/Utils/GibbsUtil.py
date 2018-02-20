@@ -14,7 +14,7 @@ def run_gibbs_command(command):
 
 def parse_gibbs_output():
     outputFileDir = '/kb/module/work/tmp'
-    #outputFileDir = './temp'
+    #outputFileDir = '/Users/arw/identify_promoter/test_local/workdir/tmp'
     outputFilePath = outputFileDir + '/gibbs_output.txt'
     gibbsFile = open(outputFilePath,'r')
     motifList = []
@@ -28,7 +28,7 @@ def parse_gibbs_output():
     #TODO: keeping p-value as -1 until I understand the output stats better
     for line in gibbsFile:
         if processLoc is True:
-            if '********' in line:
+            if '****' in line:
                 processLoc = False
                 gotSig = False
                 motifDict['p-value'] = -1.0
@@ -48,13 +48,18 @@ def parse_gibbs_output():
                     motifDict['Iupac_signature'] = motif
                     gotSig = True
                 locList = []
-                locList.append(elems[9])
-                locList.append(elems[2])
-                locList.append(elems[6])
-                if elems[8] == 'F':
-                    locList.append('+')
-                else:
-                    locList.append('-')
+                if len(line) == 9:
+                    locList.append(elems[9])
+                    locList.append(elems[2])
+                    locList.append(elems[6])
+                    if elems[8] == 'F':
+                        locList.append('+')
+                    else:
+                        locList.append('-')
+                elif len(line) == 8:
+                    locList.apped(elems[8])
+                    locList.apped(elems[2])
+                    locList.apped(elems[5])
                 motifDict['Locations'] = locList
         if processPWM is True:
             if len(line.split()) == 0:
