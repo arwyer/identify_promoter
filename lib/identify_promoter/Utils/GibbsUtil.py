@@ -62,7 +62,7 @@ def parse_gibbs_output():
                     locList.apped(elems[5])
                 motifDict['Locations'] = locList
         if processPWM is True:
-            if len(line.split()) == 0:
+            if 'Background' in line:
                 processPWM = False
                 motifDict['pwm'] = pwmList
             elif '|' in line:
