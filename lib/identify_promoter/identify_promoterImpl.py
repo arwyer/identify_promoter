@@ -96,7 +96,7 @@ get_promoter_for_gene retrieves promoter sequence for a gene
             for line in pFile:
                 lineCount += 1
         numFeat = lineCount/2
-        with open(promoterFastaFilePath,'w') as pFile:
+        with open(promoterFastaFilePath,'r') as pFile:
             fileStr = pFile.read()
         promHtmlStr = '<html><body> '  + fileStr + ' </body></html>'
         with open(htmlDir + '/promoters.html','w') as promHTML:
