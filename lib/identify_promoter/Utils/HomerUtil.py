@@ -70,3 +70,4 @@ def parse_homer_output():
     jsonFilePath = outputDirPath + '/homer.json'
     with open(jsonFilePath,'w') as jsonFile:
         json.dump(motifList,jsonFile)
+    return motifList

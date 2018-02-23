@@ -11,6 +11,7 @@ from pyseqlogo.pyseqlogo import draw_logo, setup_axis
 htmlReport = '<html><body>'
 htmlReport += '<table style="width:100%" border=1>\n' + '<tr>\n'
 htmlReport += '<th> Sequence </th>\n' + '<th> Logo </th>\n' + '<th> Ratio </th>\n + </tr>\n'
+numFeat = int(sys.argv[3])
 with open(sys.argv[1],'r') as jsonFile:
     jsonData = json.load(jsonFile)
     for motif in jsonData:
@@ -22,7 +23,12 @@ with open(sys.argv[1],'r') as jsonFile:
         #saveTo = htmlDir + '/' + imgName
         saveTo = '/' + '/'.join(sys.argv[2].split('/')[:-1]) + '/'  + imgName
         htmlReport += '<td> <img src="' + imgName + '" height=25%> </td>\n'
-        htmlReport += '<td> 1 </td>\n'
+        seqDict = {}
+        for l in motif['Locations']:
+            seqDict[l[0]] = 1
+        ratio = float(numFeat)/float(len(seqDict))
+        htmlReport += '<td> '  + str(ratio) ' </td>\n'
+
         htmlReport += '</tr>\n'
         plt.savefig(saveTo)
         plt.close()

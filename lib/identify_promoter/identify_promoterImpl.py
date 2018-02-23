@@ -15,6 +15,7 @@ from datetime import datetime
 import uuid
 import identify_promoter.Utils.GibbsUtil as GU
 import identify_promoter.Utils.HomerUtil as HU
+#from identify_promoter.Utils.ParsePromFile import makePromHTMLReports
 import subprocess
 from biokbase.workspace.client import Workspace
 #import matplotlib
@@ -84,20 +85,42 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         os.mkdir(self.shared_folder+'/homer_out')
         HU.run_homer_command(homerMotifCommand)
         HU.run_homer_command(homerLocationCommand)
-        GU.parse_gibbs_output()
-        HU.parse_homer_output()
+        gibbsMotifList = GU.parse_gibbs_output()
+        homerMotifList = HU.parse_homer_output()
         timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000)
         timestamp = str(timestamp)
         htmlDir = self.shared_folder + '/html' +  timestamp
         os.mkdir(htmlDir)
-        subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py',self.shared_folder + '/gibbs.json',htmlDir + '/gibbs.html'])
-        subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py',self.shared_folder + '/homer_out/homer.json',htmlDir + '/homer.html'])
+        lineCount = 0
+        with open(promoterFastaFilePath,'r') as pFile:
+            for line in pFile:
+                lineCount += 1
+        numFeat = lineCount/2
+        with open(promoterFastaFilePath,'w') as pFile:
+            fileStr = pFile.read()
+        promHtmlStr = '<html><body> '  + fileStr + ' </body></html>'
+        with open(htmlDir + '/promoters.html','w') as promHTML:
+            promHTML.write(promHtmlStr)
+        subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py',self.shared_folder + '/gibbs.json',htmlDir + '/gibbs.html',str(numFeat)])
+        subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py',self.shared_folder + '/homer_out/homer.json',htmlDir + '/homer.html',str(numFeat)])
+        fullMotifList = []
+        for h in homerMotifList:
+            add = True
+            for g in gibbsMotifList:
+                if h['Iupac_signature'] == g['Iupac_signature']:
+                    add = False
+                    break
+            if add:
+                fullMotifList.append(h)
+        for g in gibbsMotifList:
+            fullMotifList.append(g)
+
 
 
         #What needs to happen here:
         #call makeLogo for each of the json outputs(capture these from somewhere)
         dfu = DataFileUtil(self.callback_url)
-        parsed = ['gibbs.html','homer.html']
+        parsed = ['gibbs.html','homer.html','promoters.html']
         indexHtmlStr = '<html>'
         #use js to load the page content
         for p in parsed:

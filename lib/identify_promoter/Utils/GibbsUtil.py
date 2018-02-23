@@ -26,6 +26,7 @@ def parse_gibbs_output():
     motifIncluded = False
 
     #TODO: keeping p-value as -1 until I understand the output stats better
+    motifDict['Locations'] = []
     for line in gibbsFile:
         if processLoc is True:
             if '****' in line:
@@ -38,6 +39,7 @@ def parse_gibbs_output():
                 if not motifIncluded:
                     motifList.append(motifDict)
                 motifDict = {}
+                motifDict['Locations'] = []
                 motifIncluded = False
                 pwmList = []
                 #add motif to list from here
@@ -60,8 +62,8 @@ def parse_gibbs_output():
                     locList.apped(elems[8])
                     locList.apped(elems[2])
                     locList.apped(elems[5])
-                motifDict['Locations'] = locList
-        if processPWM is True:
+                motifDict['Locations'].append(locList)
+        elif processPWM is True:
             if 'Background' in line:
                 processPWM = False
                 motifDict['pwm'] = pwmList
@@ -75,12 +77,13 @@ def parse_gibbs_output():
                 pwmList.append(rowList)
 
 
-        if 'columns' in line:
+        elif 'columns' in line:
             motifLength = int(line.split()[0])
             processLoc = True
-        if 'Motif probability model' in line:
+        elif 'Motif probability model' in line:
             processPWM = True
 
     jsonFilePath = outputFileDir + '/gibbs.json'
     with open(jsonFilePath,'w') as jsonFile:
         json.dump(motifList,jsonFile)
+    return motifList
