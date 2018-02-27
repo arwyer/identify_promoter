@@ -59,9 +59,13 @@ def parse_gibbs_output():
                     else:
                         locList.append('-')
                 elif len(line.split()) == 9:
-                    locList.apped(elems[8])
-                    locList.apped(elems[2])
-                    locList.apped(elems[5])
+                    locList.append(elems[8])
+                    locList.append(elems[2])
+                    locList.append(elems[5])
+                    if elems[7] == 'F':
+                        locList.append('+')
+                    else:
+                        locList.append('-')
                 motifDict['Locations'].append(locList)
         elif processPWM is True:
             if 'Background' in line:
