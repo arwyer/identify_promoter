@@ -50,7 +50,7 @@ def parse_gibbs_output():
                     motifDict['Iupac_signature'] = motif
                     gotSig = True
                 locList = []
-                if len(line.split()) == 9:
+                if len(line.split()) == 10:
                     locList.append(elems[9])
                     locList.append(elems[2])
                     locList.append(elems[6])
@@ -58,7 +58,7 @@ def parse_gibbs_output():
                         locList.append('+')
                     else:
                         locList.append('-')
-                elif len(line.split()) == 8:
+                elif len(line.split()) == 9:
                     locList.apped(elems[8])
                     locList.apped(elems[2])
                     locList.apped(elems[5])
