@@ -27,7 +27,7 @@ with open(sys.argv[1],'r') as jsonFile:
         for l in motif['Locations']:
             seqDict[l[0]] = 1
         ratio = float(numFeat)/float(len(seqDict))
-        htmlReport += '<td> '  + str(ratio) ' </td>\n'
+        htmlReport += '<td> '  + str(ratio) + ' </td>\n'
 
         htmlReport += '</tr>\n'
         plt.savefig(saveTo)
