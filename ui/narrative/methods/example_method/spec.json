@@ -47,7 +47,7 @@
         },
         {
             "id": "motif_min_length",
-            "optional": true,
+            "optional": false,
             "advanced": true,
             "allow_multiple": false,
             "default_values": [ "8" ],
@@ -59,7 +59,7 @@
         },
         {
             "id": "motif_max_length",
-            "optional": true,
+            "optional": false,
             "advanced": true,
             "allow_multiple": false,
             "default_values": [ "16" ],
