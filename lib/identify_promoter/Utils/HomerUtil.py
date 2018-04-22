@@ -1,12 +1,13 @@
 import sys
 import os
 import json
+import subprocess
 
 def build_homer_motif_command(inputFilePath):
     outputDirPath = '/kb/module/work/tmp/homer_out'
     #outputDirPath = './temp/homer_out'
     #command = 'findMotifs.pl ' + inputFilePath + ' fasta ' + outputDirPath
-    command = 'findMotifs.pl ' + inputFilePath + ' fasta ' + outputDirPath +' -basic'
+    command = '/kb/module/work/homer/bin/findMotifs.pl ' + inputFilePath + ' fasta ' + outputDirPath +' -basic'
     return command
 
 def build_homer_location_command(inputFilePath):
@@ -20,7 +21,11 @@ def build_homer_location_command(inputFilePath):
 
 
 def run_homer_command(command):
-    os.system(command)
+    try:
+        subprocess.check_output(command,shell=True, stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        print(e.returncode)
+    #os.system(command)
 
 def parse_homer_output():
     outputDirPath = '/kb/module/work/tmp/homer_out'

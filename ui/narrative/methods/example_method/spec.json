@@ -44,6 +44,30 @@
                 "validate_as": "int",
                 "min_integer" : 0
             }
+        },
+        {
+            "id": "motif_min_length",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "8" ],
+            "field_type": "text",
+            "text_options": {
+                "validate_as": "int",
+                "min_integer" : 0
+            }
+        },
+        {
+            "id": "motif_max_length",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "16" ],
+            "field_type": "text",
+            "text_options": {
+                "validate_as": "int",
+                "min_integer" : 0
+            }
         }
     ],
     "behavior": {

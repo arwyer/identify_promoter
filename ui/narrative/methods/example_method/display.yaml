@@ -44,6 +44,17 @@ parameters :
             Promoter length
         short-hint : |
             Length to search over
+    motif_min_length :
+        ui-name : |
+            Minimum motif length
+        short-hint : |
+            Minimum length of motif to search for
+    motif_max_length :
+        ui-name : |
+            Maximum motif length
+        short-hint : |
+            Maximum length of motif to search for
+
 
 description : |
     <p>Method to find promoters.</p>

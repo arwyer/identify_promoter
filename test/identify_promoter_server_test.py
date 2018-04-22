@@ -93,7 +93,9 @@ class identify_promoterTest(unittest.TestCase):
             'genome_ref': '12566/5/3',
             #'featureSet_ref': '27852/3/1',
             'featureSet_ref': '12566/6/1',
-            'promoter_length':100
+            'promoter_length':100,
+            'motif_min_length':8,
+            'motif_max_length':16
         }
 
         result = self.getImpl().find_motifs(self.getContext(),params)

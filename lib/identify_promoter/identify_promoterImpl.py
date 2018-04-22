@@ -77,15 +77,26 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         #BEGIN find_motifs
 
         #TODO: have these guys return output paths
+        motMin = params['motif_min_length']
+        motMax = params['motif_max_length']
         promoterFastaFilePath = self.get_promoter_for_gene(ctx,params)[0]
-        gibbsCommand = GU.build_gibbs_command(promoterFastaFilePath)
-        GU.run_gibbs_command(gibbsCommand)
+
+        gibbsCommandList = []
+        for i in range(motMin,motMax+1,2):
+            gibbsCommandList.append(GU.build_gibbs_command(promoterFastaFilePath,i))
+
+        for g in gibbsCommandList:
+            GU.run_gibbs_command(g)
+        #gibbsCommand = GU.build_gibbs_command(promoterFastaFilePath)
+        #GU.run_gibbs_command(gibbsCommand)
+        #print(promoterFastaFilePath)
         homerMotifCommand = HU.build_homer_motif_command(promoterFastaFilePath)
         homerLocationCommand = HU.build_homer_location_command(promoterFastaFilePath)
         os.mkdir(self.shared_folder+'/homer_out')
+        #print(homerMotifCommand)
         HU.run_homer_command(homerMotifCommand)
         HU.run_homer_command(homerLocationCommand)
-        gibbsMotifList = GU.parse_gibbs_output()
+        gibbsMotifList = GU.parse_gibbs_output(motMin,motMax)
         homerMotifList = HU.parse_homer_output()
         timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000)
         timestamp = str(timestamp)
