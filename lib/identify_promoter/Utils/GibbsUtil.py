@@ -23,10 +23,11 @@ def parse_gibbs_output(motif_min_length, motif_max_length):
 
     #outputFileDir = '/Users/arw/identify_promoter/test_local/workdir/tmp'
     #outputFilePath = outputFileDir + '/gibbs_output_' + str(motifLen) + '.txt'
+    motifList = []
     for outputFilePath in outputFileList:
 
         gibbsFile = open(outputFilePath,'r')
-        motifList = []
+
         motifDict = {}
         pwmList = []
         processPWM = False
