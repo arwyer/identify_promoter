@@ -40,7 +40,7 @@ parameters :
         short-hint : |
             features
     promoter_length :
-        ui-name: |
+        ui-name : |
             Promoter length
         short-hint : |
             Length to search over
