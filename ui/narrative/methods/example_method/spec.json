@@ -94,6 +94,16 @@
                     "input_parameter": "promoter_length",
                     "target_property": "promoter_length"
 
+                },
+                {
+                    "input_parameter": "motif_min_length",
+                    "target_property": "motif_min_length"
+
+                },
+                {
+                    "input_parameter": "motif_max_length",
+                    "target_property": "motif_max_length"
+
                 }
             ],
             "output_mapping": [
