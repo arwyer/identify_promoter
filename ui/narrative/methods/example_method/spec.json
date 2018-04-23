@@ -48,7 +48,7 @@
         {
             "id": "motif_min_length",
             "optional": false,
-            "advanced": true,
+            "advanced": false,
             "allow_multiple": false,
             "default_values": [ "8" ],
             "field_type": "text",
@@ -60,7 +60,7 @@
         {
             "id": "motif_max_length",
             "optional": false,
-            "advanced": true,
+            "advanced": false,
             "allow_multiple": false,
             "default_values": [ "16" ],
             "field_type": "text",
