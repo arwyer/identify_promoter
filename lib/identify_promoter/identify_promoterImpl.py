@@ -77,6 +77,8 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         #BEGIN find_motifs
 
         #TODO: have these guys return output paths
+        for key, value in params.iteritems() :
+            print key
         motMin = params['motif_min_length']
         motMax = params['motif_max_length']
         promoterFastaFilePath = self.get_promoter_for_gene(ctx,params)[0]
