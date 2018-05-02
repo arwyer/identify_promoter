@@ -10,7 +10,9 @@ from pyseqlogo.pyseqlogo import draw_logo, setup_axis
 #htmlDir = '/kb/module/work/tmp/html'
 htmlReport = '<html><body>'
 htmlReport += '<table style="width:100%" border=1>\n' + '<tr>\n'
-htmlReport += '<th> Sequence </th>\n' + '<th> Logo </th>\n' + '<th> Ratio </th>\n + </tr>\n'
+#htmlReport += '<th> Sequence </th>\n' + '<th> Logo </th>\n' + '<th> Ratio </th>\n + </tr>\n'
+htmlReport += '<th> Sequence </th>\n' + '<th> Logo </th>\n' + '<th> Locations </th>\n + </tr>\n'
+numFeat = int(sys.argv[3])
 numFeat = int(sys.argv[3])
 with open(sys.argv[1],'r') as jsonFile:
     jsonData = json.load(jsonFile)
@@ -27,7 +29,13 @@ with open(sys.argv[1],'r') as jsonFile:
         for l in motif['Locations']:
             seqDict[l[0]] = 1
         ratio = float(len(seqDict))/float(numFeat)
-        htmlReport += '<td> '  + str(ratio) + ' </td>\n'
+
+        locationString = ''
+        for loc in motif['Locations']:
+            locationString += ' '.join(loc) + '\n'
+
+        htmlReport += '<td> '  + locationString + ' </td>\n'
+        #htmlReport += '<td> '  + str(ratio) + ' </td>\n'
 
         htmlReport += '</tr>\n'
         plt.savefig(saveTo)
