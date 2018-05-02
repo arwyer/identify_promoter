@@ -32,7 +32,7 @@ with open(sys.argv[1],'r') as jsonFile:
 
         locationString = ''
         for loc in motif['Locations']:
-            locationString += ' '.join(loc) + '\n'
+            locationString += ' '.join(loc) + '<br />'
 
         htmlReport += '<td> '  + locationString + ' </td>\n'
         #htmlReport += '<td> '  + str(ratio) + ' </td>\n'
