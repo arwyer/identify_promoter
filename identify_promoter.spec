@@ -18,6 +18,8 @@ module identify_promoter {
     string genome_ref;
     string featureSet_ref;
     int promoter_length;
+    int motif_min_length;
+    int motif_max_length;
   } get_promoter_for_gene_input;
 
   typedef structure {
