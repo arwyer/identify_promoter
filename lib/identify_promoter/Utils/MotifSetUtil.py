@@ -7,8 +7,8 @@ def ConvertMotif(motif,MotifSet):
     for loc in motif['Locations']:
         new_loc = {}
         new_loc['Feature_id'] = loc[0]
-        new_loc['start'] = loc[1]
-        new_loc['end'] = loc[2]
+        new_loc['start'] = int(loc[1])
+        new_loc['end'] = int(loc[2])
         new_loc['orientation'] = loc[3]
         new_loc['sequence']= 'SEQUENCE'
         newMotif['Motif_Locations'].append(new_loc.copy())
