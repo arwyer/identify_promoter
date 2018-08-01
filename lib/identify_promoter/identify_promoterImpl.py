@@ -246,7 +246,7 @@ function openReport(evt, reportName) {
         #Pass motif set into this
         save_objects_params = {}
         #save_objects_params['id'] = self.ws_info[0]
-        save_objects_params['id'] = self.params.get('ws_id')
+        save_objects_params['id'] = params.['workspace_name']
         save_objects_params['objects'] = [{'type': 'KBaseGwasData.MotifSet' , 'data' : MSO, 'name':objname}]
 
         info = dfu.save_objects(save_objects_params)
