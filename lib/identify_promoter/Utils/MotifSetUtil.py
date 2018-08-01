@@ -20,7 +20,7 @@ def ConvertMotif(motif,MotifSet):
         newMotif['PFM'][letter] = []
     for row in motif['pwm']:
         for pair in row:
-            newMotif['PWM'][pair[0]].append([pair[1]])
+            newMotif['PWM'][pair[0]].append(pair[1])
     return newMotif
 
 def parseMotifList(MotifList, MotifSet):
