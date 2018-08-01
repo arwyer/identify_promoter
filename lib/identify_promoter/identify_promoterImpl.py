@@ -241,13 +241,13 @@ function openReport(evt, reportName) {
             MSO['Background'][letter] = 0.0
 
         MSU.parseMotifList(fullMotifList,MSO)
-        objname = '/kb/module/data/MotifSet_' + str(int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000))
+        objname = '/kb/module/data/MotifSet' + str(int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000))
 
         #Pass motif set into this
         save_objects_params = {}
         #save_objects_params['id'] = self.ws_info[0]
         save_objects_params['id'] = long(params['workspace_name'].split('_')[1])
-        save_objects_params['objects'] = [{'type': 'KBaseGwasData.MotifSet' , 'data' : MSO, 'name': objname}]
+        save_objects_params['objects'] = [{'type': 'KBaseGwasData.MotifSet' , 'data' : MSO , 'name' : ' /kb/module/data/MotifSet_1533135927785'}]
 
         info = dfu.save_objects(save_objects_params)
         motif_set_ref = "%s/%s/%s" % (info[6], info[0], info[4])
