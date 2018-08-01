@@ -250,7 +250,7 @@ function openReport(evt, reportName) {
         save_objects_params['id'] = dfu.ws_name_to_id(params['workspace_name'])
         save_objects_params['objects'] = [{'type': 'KBaseGwasData.MotifSet' , 'data' : MSO , 'name' : objname}]
 
-        info = dfu.save_objects(save_objects_params)
+        info = dfu.save_objects(save_objects_params)[0]
         motif_set_ref = "%s/%s/%s" % (info[6], info[0], info[4])
         #object_upload_ret = dfu.file_to_shock()
 
