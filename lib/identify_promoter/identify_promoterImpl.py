@@ -16,6 +16,7 @@ import uuid
 import identify_promoter.Utils.GibbsUtil as GU
 import identify_promoter.Utils.HomerUtil as HU
 import identify_promoter.Utils.MotifSetUtil as MSU
+import identify_promoter.Utils.MemeUtil as MEU
 #from identify_promoter.Utils.ParsePromFile import makePromHTMLReports
 import subprocess
 from biokbase.workspace.client import Workspace
@@ -103,8 +104,14 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         #print(homerMotifCommand)
         HU.run_homer_command(homerMotifCommand)
         HU.run_homer_command(homerLocationCommand)
+
+        MEMEMotifCommand = MEU.build_meme_command(promoterFastaFilePath)
+        MEU.run_meme_command(MEMEMotifCommand)
+
         gibbsMotifList = GU.parse_gibbs_output(motMin,motMax)
         homerMotifList = HU.parse_homer_output()
+        memeMotifList = MEU.parse_meme_output()
+
         timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000)
         timestamp = str(timestamp)
         htmlDir = self.shared_folder + '/html' +  timestamp
@@ -121,6 +128,7 @@ get_promoter_for_gene retrieves promoter sequence for a gene
             promHTML.write(promHtmlStr)
         subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py',self.shared_folder + '/gibbs.json',htmlDir + '/gibbs.html',str(numFeat)])
         subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py',self.shared_folder + '/homer_out/homer.json',htmlDir + '/homer.html',str(numFeat)])
+        subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py',self.shared_folder + '/meme_out/meme.json',htmlDir + '/meme.html',str(numFeat)])
         fullMotifList = []
         for h in homerMotifList:
             add = True
@@ -128,17 +136,28 @@ get_promoter_for_gene retrieves promoter sequence for a gene
                 if h['Iupac_signature'] == g['Iupac_signature']:
                     add = False
                     break
+            for m in memeMotifList:
+                if m['Iupac_signature'] == h['Iupac_signature']:
+                    add = False
+                    break
             if add:
                 fullMotifList.append(h)
         for g in gibbsMotifList:
-            fullMotifList.append(g)
-
+            add = True
+            for m in memeMotifList:
+                if m['Iupac_signature'] == g['Iupac_signature']:
+                    add = False
+                    break
+                if add:
+                    fullMotifList.append(g)
+        for m in memeMotifList:
+            fullMotifList.append(m)
 
 
         #What needs to happen here:
         #call makeLogo for each of the json outputs(capture these from somewhere)
         dfu = DataFileUtil(self.callback_url)
-        parsed = ['gibbs.html','homer.html','promoters.html']
+        parsed = ['gibbs.html','homer.html','promoters.html','meme.html']
         indexHtmlStr = '<html>'
         #use js to load the page content
         for p in parsed:

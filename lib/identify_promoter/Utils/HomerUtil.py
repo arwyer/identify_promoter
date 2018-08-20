@@ -8,7 +8,8 @@ def build_homer_motif_command(inputFilePath):
     #outputDirPath = './temp/homer_out'
     #command = 'findMotifs.pl ' + inputFilePath + ' fasta ' + outputDirPath
     #/kb/module/work/homer/bin/
-    command = 'findMotifs.pl ' + inputFilePath + ' fasta ' + outputDirPath +' -basic'
+    #command = 'findMotifs.pl ' + inputFilePath + ' fasta ' + outputDirPath +' -basic'
+    command = '/kb/module/work/homer/bin/findMotifs.pl ' + inputFilePath + ' fasta ' + outputDirPath +' -basic'
     return command
 
 def build_homer_location_command(inputFilePath):
@@ -16,8 +17,8 @@ def build_homer_location_command(inputFilePath):
     #outputDirPath = './temp/homer_out'
     outputFilePath = outputDirPath + '/homerMotifs.all.motifs'
     outputTo = outputDirPath + '/homer_locations.txt'
+    command = '/kb/module/work/homer/bin/scanMotifGenomeWide.pl ' + outputFilePath + ' ' + inputFilePath + ' > ' + outputTo
     #command = 'scanMotifGenomeWide.pl ' + outputFilePath + ' ' + inputFilePath + ' > ' + outputTo
-    command = 'scanMotifGenomeWide.pl ' + outputFilePath + ' ' + inputFilePath + ' > ' + outputTo
     return command
 
 
