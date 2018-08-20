@@ -30,8 +30,8 @@ def run_homer_command(command):
     #os.system(command)
 
 def parse_homer_output():
-    outputDirPath = '/kb/module/work/tmp/homer_out'
-    #outputDirPath = './temp/homer_out'
+    #outputDirPath = '/kb/module/work/tmp/homer_out'
+    outputDirPath = './temp/homer_out'
     outputFilePath = outputDirPath + '/homerMotifs.all.motifs'
     locationFilePath = outputDirPath + '/homer_locations.txt'
     homerFile = open(outputFilePath,'r')
