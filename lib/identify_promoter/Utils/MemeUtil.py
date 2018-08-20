@@ -7,6 +7,7 @@ import subprocess
 def build_meme_command(inputFilePath):
     outputFlag = ' -o /kb/module/work/tmp/meme_out -revcomp'
     command = '/kb/module/work/meme/bin/meme '  + inputFilePath + outputFlag
+    command = 'meme '  + inputFilePath + outputFlag
 
     return command
 
