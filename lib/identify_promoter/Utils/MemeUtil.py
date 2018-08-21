@@ -5,8 +5,9 @@ import subprocess
 
 #build the command to run meme, use some default flags
 def build_meme_command(inputFilePath):
-    outputFlag = ' -o /kb/module/work/tmp/meme_out -revcomp'
-    command = '/kb/module/work/meme/bin/meme '  + inputFilePath + outputFlag
+    #outputFlag = ' -o /kb/module/work/tmp/meme_out -revcomp -dna'
+    outputFlag = ' -o ./tmp/meme_out -revcomp -dna'
+    #command = '/kb/module/work/meme/bin/meme '  + inputFilePath + outputFlag
     command = 'meme '  + inputFilePath + outputFlag
 
     return command
@@ -21,7 +22,8 @@ def run_meme_command(command):
         print(e.returncode)
 #parse output into old motif format(maybe new format if thats useful?)
 def parse_meme_output():
-    outputDir = '/kb/module/work/tmp/meme_out'
+    #outputDir = '/kb/module/work/tmp/meme_out'
+    outputDir = './tmp/meme_out'
     outputFile = outputDir + '/meme.txt'
     file = open(outputFile,'r')
 
