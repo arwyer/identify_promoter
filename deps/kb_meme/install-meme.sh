@@ -8,3 +8,4 @@ make
 make install
 export PATH=/kb/module/work/meme/bin:$PATH
 cd ..
+chmod -R 777 meme-5.0.1
