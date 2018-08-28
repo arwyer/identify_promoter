@@ -126,9 +126,10 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         promHtmlStr = '<html><body> '  + fileStr + ' </body></html>'
         with open(htmlDir + '/promoters.html','w') as promHTML:
             promHTML.write(promHtmlStr)
-        subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py',self.shared_folder + '/gibbs.json',htmlDir + '/gibbs.html',str(numFeat)])
-        subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py',self.shared_folder + '/homer_out/homer.json',htmlDir + '/homer.html',str(numFeat)])
-        subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py',self.shared_folder + '/meme_out/meme.json',htmlDir + '/meme.html',str(numFeat)])
+        JsonPath = '/kb/module/work/tmp'
+        subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py',JsonPath + '/gibbs.json',htmlDir + '/gibbs.html',str(numFeat)])
+        subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py',JsonPath + '/homer_out/homer.json',htmlDir + '/homer.html',str(numFeat)])
+        subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py',JsonPath + '/meme_out/meme.json',htmlDir + '/meme.html',str(numFeat)])
         fullMotifList = []
         for h in homerMotifList:
             add = True
@@ -157,7 +158,7 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         #What needs to happen here:
         #call makeLogo for each of the json outputs(capture these from somewhere)
         dfu = DataFileUtil(self.callback_url)
-        parsed = ['gibbs.html','homer.html','promoters.html','meme.html']
+        parsed = ['gibbs.html','homer.html','meme.html','promoters.html']
         indexHtmlStr = '<html>'
         #use js to load the page content
         for p in parsed:
