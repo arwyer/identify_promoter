@@ -1,11 +1,11 @@
 #!/bin/bash
 
+dest=/kb/deployment/bin/meme
 curl -O http://meme-suite.org/meme-software/5.0.1/meme_5.0.1_1.tar.gz
 tar zxf meme_5.0.1_1.tar.gz
 cd meme-5.0.1
-./configure --prefix=/kb/module/work/meme
+./configure --prefix=$dest
 make
 make install
-export PATH=/kb/module/work/meme/bin:$PATH
+export PATH=$dest/bin:$PATH
 cd ..
-chmod -R 777 meme-5.0.1

@@ -5,9 +5,10 @@ import subprocess
 
 #build the command to run meme, use some default flags
 def build_meme_command(inputFilePath):
-    #outputFlag = ' -o /kb/module/work/tmp/meme_out -revcomp -dna'
-    outputFlag = ' -o ./tmp/meme_out -revcomp -dna'
-    command = '/kb/module/work/meme/bin/meme '  + inputFilePath + outputFlag
+    outputFlag = ' -o /kb/module/work/tmp/meme_out -revcomp -dna'
+    #no cache
+    #outputFlag = ' -o ./tmp/meme_out -revcomp -dna'
+    command = '/kb/deployment/bin/meme/bin/meme '  + inputFilePath + outputFlag
     #command = 'meme '  + inputFilePath + outputFlag
 
     return command
@@ -22,8 +23,8 @@ def run_meme_command(command):
         print(e.returncode)
 #parse output into old motif format(maybe new format if thats useful?)
 def parse_meme_output():
-    #outputDir = '/kb/module/work/tmp/meme_out'
-    outputDir = './tmp/meme_out'
+    outputDir = '/kb/module/work/tmp/meme_out'
+    #outputDir = './tmp/meme_out'
     outputFile = outputDir + '/meme.txt'
     file = open(outputFile,'r')
 
@@ -101,10 +102,10 @@ def parse_meme_output():
                     continue
                 elems = line.replace('\n','').split()
                 rowList = []
-                rowList.append(('A',elems[0]))
-                rowList.append(('C',elems[1]))
-                rowList.append(('G',elems[2]))
-                rowList.append(('T',elems[3]))
+                rowList.append(('A',float(elems[0])))
+                rowList.append(('C',float(elems[1])))
+                rowList.append(('G',float(elems[2])))
+                rowList.append(('T',float(elems[3])))
                 motifDict['pwm'].append(rowList)
     jsonFilePath = outputDir + '/meme.json'
     with open(jsonFilePath,'w') as jsonFile:

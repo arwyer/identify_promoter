@@ -4,21 +4,21 @@ import json
 import subprocess
 
 def build_homer_motif_command(inputFilePath):
-    #outputDirPath = '/kb/module/work/tmp/homer_out'
-    outputDirPath = './temp/homer_out'
+    outputDirPath = '/kb/module/work/tmp/homer_out'
+    #outputDirPath = './temp/homer_out'
     #command = 'findMotifs.pl ' + inputFilePath + ' fasta ' + outputDirPath
     #/kb/module/work/homer/bin/
     #command = 'findMotifs.pl ' + inputFilePath + ' fasta ' + outputDirPath +' -basic'
-    command = 'findMotifs.pl ' + inputFilePath + ' fasta ' + outputDirPath +' -basic'
+    command = '/kb/deployment/bin/findMotifs.pl ' + inputFilePath + ' fasta ' + outputDirPath +' -basic'
     return command
 
 def build_homer_location_command(inputFilePath):
-    #outputDirPath = '/kb/module/work/tmp/homer_out'
-    outputDirPath = './temp/homer_out'
+    outputDirPath = '/kb/module/work/tmp/homer_out'
+    #outputDirPath = './temp/homer_out'
     outputFilePath = outputDirPath + '/homerMotifs.all.motifs'
     outputTo = outputDirPath + '/homer_locations.txt'
-    #command = '/kb/module/work/homer/bin/scanMotifGenomeWide.pl ' + outputFilePath + ' ' + inputFilePath + ' > ' + outputTo
-    command = 'scanMotifGenomeWide.pl ' + outputFilePath + ' ' + inputFilePath + ' > ' + outputTo
+    command = '/kb/deployment/bin/scanMotifGenomeWide.pl ' + outputFilePath + ' ' + inputFilePath + ' > ' + outputTo
+    #command = 'scanMotifGenomeWide.pl ' + outputFilePath + ' ' + inputFilePath + ' > ' + outputTo
     return command
 
 
@@ -26,12 +26,14 @@ def run_homer_command(command):
     try:
         subprocess.check_output(command,shell=True, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
+        print('*******HOMER ERROR******** : ' + command)
         print(e.returncode)
     #os.system(command)
 
 def parse_homer_output():
-    #outputDirPath = '/kb/module/work/tmp/homer_out'
-    outputDirPath = './temp/homer_out'
+    outputDirPath = '/kb/module/work/tmp/homer_out'
+    #outputDirPath = './temp/homer_out'
+    #comment no cache
     outputFilePath = outputDirPath + '/homerMotifs.all.motifs'
     locationFilePath = outputDirPath + '/homer_locations.txt'
     homerFile = open(outputFilePath,'r')
