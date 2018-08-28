@@ -4,7 +4,7 @@ pip install pyBigWig
 sudo easy_install --upgrade numpy
 mkdir /tmp/python-eggs
 export PYTHON_EGG_CACHE = /tmp/python-eggs
-sudo easy_install matplotlib==1.5.3
+sudo easy_install matplotlib
 pip install pandas
 git clone https://github.com/saketkc/pyseqlogo.git
 cd pyseqlogo
