@@ -24,10 +24,10 @@ RUN pip install coverage
 # -----------------------------------------
 RUN mkdir -p /kb/deps
 COPY ./deps /kb/deps
-RUN echo Making dependency
+RUN echo Making dependencies
 
 RUN \
-  #sh /kb/deps/kb_psl/install-pyseqlogo.sh && \
+  sh /kb/deps/kb_psl/install-pyseqlogo.sh && \
   sh /kb/deps/kb_gibbs/install-gibbs.sh && \
   sh /kb/deps/kb_homer/install-homer.sh && \
   sh /kb/deps/kb_meme/install-meme.sh
