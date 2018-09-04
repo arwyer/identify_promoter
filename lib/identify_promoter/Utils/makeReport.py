@@ -1,6 +1,7 @@
 import json
 import sys
 import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from pyseqlogo.pyseqlogo import draw_logo, setup_axis
 
