@@ -127,9 +127,9 @@ get_promoter_for_gene retrieves promoter sequence for a gene
         with open(htmlDir + '/promoters.html','w') as promHTML:
             promHTML.write(promHtmlStr)
         JsonPath = '/kb/module/work/tmp'
-        subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py',JsonPath + '/gibbs.json',htmlDir + '/gibbs.html',str(numFeat)])
-        subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py',JsonPath + '/homer_out/homer.json',htmlDir + '/homer.html',str(numFeat)])
-        subprocess.call(['python3','/kb/module/lib/identify_promoter/Utils/makeReport.py',JsonPath + '/meme_out/meme.json',htmlDir + '/meme.html',str(numFeat)])
+        subprocess.call(['python','/kb/module/lib/identify_promoter/Utils/makeReport.py',JsonPath + '/gibbs.json',htmlDir + '/gibbs.html',str(numFeat)])
+        subprocess.call(['python','/kb/module/lib/identify_promoter/Utils/makeReport.py',JsonPath + '/homer_out/homer.json',htmlDir + '/homer.html',str(numFeat)])
+        subprocess.call(['python','/kb/module/lib/identify_promoter/Utils/makeReport.py',JsonPath + '/meme_out/meme.json',htmlDir + '/meme.html',str(numFeat)])
         fullMotifList = []
         for h in homerMotifList:
             add = True
