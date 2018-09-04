@@ -1,4 +1,4 @@
-FROM kbase/kbase:sdkbase.latest
+FROM kbase/kbase:sdkbase2.latest
 MAINTAINER KBase Developer
 # -----------------------------------------
 # In this section, you can install any system dependencies required
@@ -34,8 +34,8 @@ RUN \
 
 
 
-RUN apt-get update && apt-get -y install python3-pip && pip3 install numpy && pip3 install scipy && pip3 install matplotlib && pip3 install pandas && pip3 install pyBigWig
-RUN git clone https://github.com/saketkc/pyseqlogo && cd pyseqlogo && python3 setup.py install && cd ..
+#RUN apt-get update && apt-get -y install python3-pip && pip3 install numpy && pip3 install scipy && pip3 install matplotlib && pip3 install pandas && pip3 install pyBigWig
+#RUN git clone https://github.com/saketkc/pyseqlogo && cd pyseqlogo && python3 setup.py install && cd ..
 
 
 COPY ./ /kb/module
