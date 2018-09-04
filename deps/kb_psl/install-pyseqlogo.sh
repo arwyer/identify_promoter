@@ -7,7 +7,7 @@ pip install --upgrade numpy
 #sudo easy_install six=1.10
 #sudo easy_install matplotlib
 pip install --upgrade six
-pip install matplotlib
+pip install matplotlib==2.1.0
 pip install pandas
 git clone https://github.com/saketkc/pyseqlogo.git
 cd pyseqlogo

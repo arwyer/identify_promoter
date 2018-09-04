@@ -24,7 +24,7 @@ RUN pip install coverage
 # -----------------------------------------
 RUN mkdir -p /kb/deps
 COPY ./deps /kb/deps
-RUN echo Making dependencies
+RUN echo Making dependency
 
 RUN \
   sh /kb/deps/kb_psl/install-pyseqlogo.sh && \
