@@ -391,6 +391,7 @@ function openReport(evt, reportName) {
                             if end < 0:
                                 end = 0
                             promoter = record.seq[start:end].upper()
+                            #HERE: resolve ambiguous characters
                             prom += ">" + feature + "\n"
                             prom += promoter + "\n"
 
@@ -402,8 +403,9 @@ function openReport(evt, reportName) {
                             if end > len(record.seq) - 1:
                                 end = len(record.seq) - 1
                             promoter = record.seq[start:end].upper()
-                            complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'}
+                            complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A','N': 'N'}
                             promoter = ''.join([complement[base] for base in promoter[::-1]])
+                            #HERE: resolve ambiguous characters
                             prom += ">" + feature + "\n"
                             prom += promoter + "\n"
 
